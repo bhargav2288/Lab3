@@ -1,4 +1,5 @@
-﻿using System;
+﻿using COMP2084MidtermW2019.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -17,7 +18,7 @@ namespace COMP2084MidtermW2019.Controllers
         public ActionResult Index()
         {
             var cities = db.Cities.Include(c => c.Country);
-            return View();
+            return View(cities.OrderBy(c => c.Country.Name).ThenBy(p => p.Name).ToList());
         }
 
         // GET: Cities/Details/5
@@ -93,6 +94,7 @@ namespace COMP2084MidtermW2019.Controllers
             return View(city);
         }
 
+        [Authorize]
         // GET: Cities/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -111,6 +113,7 @@ namespace COMP2084MidtermW2019.Controllers
         // POST: Cities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             City city = db.Cities.Find(id);
